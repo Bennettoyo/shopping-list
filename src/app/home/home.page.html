@@ -7,19 +7,19 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item-sliding *ngFor="let list of listArray">
+  <ion-list #slidingList>
+    <ion-item-sliding (click)="toAddingItems(list); this.addItemsClicked = true" *ngFor="let list of listArray">
       <ion-item>
         <ion-label>{{list.listName}}</ion-label>
       </ion-item>
       <ion-item-options side="end">
-        <ion-item-option>
-          <ion-icon (click)="editListName()" size="large" name="create-outline"></ion-icon>
+        <ion-item-option (click)="editListName(list); this.addItemsClicked = false">
+          <ion-icon size="large" name="create-outline"></ion-icon>
         </ion-item-option>
-        <ion-item-option>
+        <ion-item-option (click)="presentDeleteConfirm(list.ID); this.addItemsClicked = false">
           <ion-icon size="large" name="trash-outline"></ion-icon>
         </ion-item-option>
-        <ion-item-option>
+        <ion-item-option (click)="closeList(); this.addItemsClicked = false">
           <ion-icon size="large" name="close-outline"></ion-icon>
         </ion-item-option>
       </ion-item-options>

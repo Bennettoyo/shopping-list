@@ -1,6 +1,6 @@
 <ion-content>
-  <ion-item>
-    <ion-label>List Name</ion-label>
-    <ion-input placeholder="Enter List Name..."></ion-input>
+  <ion-item class="ion-padding">
+    <ion-label position="stacked">Edit List Name</ion-label>
+    <ion-input [(ngModel)]="ListName" placeholder="Edit List Name..." maxlength="40" (keyup.enter)="editListName()"></ion-input>
   </ion-item>
 </ion-content>

@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{listDetails.listName}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Item has not been checked off -->
+  <ion-list #slidingList>
+    <ng-container *ngFor="let item of listDetails.Items">
+      <ion-item-sliding *ngIf="item.Status == 0">
+        <ion-item>
+          <ion-checkbox slot="start" [(ngModel)]="item.Status"></ion-checkbox>
+          <ion-label>{{item.itemName}}</ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option (click)="editListName(item)">
+            <ion-icon size="large" name="create-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option (click)="presentDeleteConfirm(item.ID)">
+            <ion-icon size="large" name="trash-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option (click)="closeList()">
+            <ion-icon size="large" name="close-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ng-container>
+  </ion-list>
+  <!-- Item has been checked off -->
+  <ion-list #slidingList>
+    <ng-container *ngFor="let item of listDetails.Items">
+      <ion-item-sliding *ngIf="item.Status == 1">
+        <ion-item>
+          <ion-checkbox slot="start" [(ngModel)]="item.Status"></ion-checkbox>
+          <ion-label class="line-through">{{item.itemName}}</ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option (click)="editListName(item)">
+            <ion-icon size="large" name="create-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option (click)="presentDeleteConfirm(item.ID)">
+            <ion-icon size="large" name="trash-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option (click)="closeList()">
+            <ion-icon size="large" name="close-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ng-container>
+  </ion-list>
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addList()" color="light">
+      <ion-icon size="large" name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab> -->
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-input [(ngModel)]="listInput" placeholder="Enter text to add shopping items..." maxlength="40"
+      (keyup.enter)="addList()">
+    </ion-input>
+  </ion-toolbar>
+</ion-footer>
