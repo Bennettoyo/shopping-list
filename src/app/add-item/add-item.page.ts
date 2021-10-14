@@ -14,6 +14,7 @@ import { AlertController } from '@ionic/angular';
 export class AddItemPage implements OnInit {
 
   public listDetails: any;
+  public itemInput: any;
 
   constructor(private modalCtr: ModalController, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) { }
 
@@ -22,13 +23,13 @@ export class AddItemPage implements OnInit {
     console.log(this.listDetails);
   }
 
-  // addList() {
-  //   this.modalCtr.create({
-  //     component: AddListPage
-  //   }).then(modalres => {
-  //     modalres.present();
-  //   })
-  // }
+  openModal() {
+    this.modalCtr.create({
+      component: AddListPage
+    }).then(modalres => {
+      modalres.present();
+    })
+  }
 
   editListName(list) {
 
@@ -43,6 +44,17 @@ export class AddItemPage implements OnInit {
 
 
   addList() {
+    if (this.itemInput != "") {
+      let obj: any = {};
+      obj.itemName = this.itemInput;
+      obj.ID = 4;
+      obj.Status = 0;
+      // this.listDetails.Items.push(obj);
+      this.itemInput = "";
+      this.shoppingListData.shoppingItem = obj;
+
+      this.openModal();
+    }
   }
 
   closeList() {

@@ -8,6 +8,7 @@ export class ShoppingListsService {
   public listArray: any = [];
   public homePageSlider: any;
   public shoppingListClicked: any;
+  public shoppingItem: any;
 
   constructor() { }
 
