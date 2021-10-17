@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
+import { HttpService } from '../http.service';
 import { ShoppingListsService } from '../shopping-lists.service';
 
 
@@ -13,26 +14,26 @@ import { ShoppingListsService } from '../shopping-lists.service';
 export class EditListPage implements OnInit {
   @Input() ListName: string;
   @Input() ID: number;
+  public listArray: any;
 
 
-  constructor(private shoppingListData: ShoppingListsService, private popover: PopoverController) { }
+  constructor(private shoppingListData: ShoppingListsService, private popover: PopoverController, private httpService: HttpService) { }
 
   ngOnInit() {
   }
 
   editListName() {
     if (this.ListName.length > 0) {
-      let editedList = this.shoppingListData.listArray.filter(listArray => listArray.ID == this.ID);
-      editedList[0].listName = this.ListName;
-      this.shoppingListData.listArray = this.shoppingListData.listArray.filter(listArray => listArray.ID !== this.ID);
-      this.shoppingListData.listArray = this.shoppingListData.listArray.concat(editedList);
-      this.popover.dismiss();
-      this.closeList();
+      this.httpService.post("shopping/editListName", { listName: this.ListName, ID: this.ID }).subscribe((rs: any) => {
+        if (rs == 1) {
+          // console.log("Success")
+        } else {
+          console.log("Error")
+        }
+      }, (err: any) => {
+        console.log("Error")
+      });
+      this.popover.dismiss({ data: true });
     }
   }
-
-  closeList() {
-    this.shoppingListData.closeList();
-  }
-
 }

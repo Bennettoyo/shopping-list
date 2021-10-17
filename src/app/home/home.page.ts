@@ -5,6 +5,7 @@ import { AddListPage } from '../add-list/add-list.page';
 import { EditListPage } from '../edit-list/edit-list.page';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { HttpService } from '../http.service';
 
 
 @Component({
@@ -14,42 +15,62 @@ import { Router } from '@angular/router';
 })
 export class HomePage implements OnInit {
 
+
+
   public listArray: any = [];
   public listInput: any = "";
   public addItemsClicked: any = false;
 
   @ViewChild("slidingList") list: IonList;
 
-  constructor(private modalCtr: ModalController, private router: Router, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) { }
-
-  ngOnInit() {
-    let listData = this.shoppingListData.getListData();
-    this.listArray = listData;
+  constructor(private modalCtr: ModalController, private httpService: HttpService, private router: Router, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) {
   }
 
-  // addList() {
-  //   this.modalCtr.create({
-  //     component: AddListPage
-  //   }).then(modalres => {
-  //     modalres.present();
-  //   })
-  // }
 
-  editListName(list) {
-    this.shoppingListData.homePageSlider = this.list;
-    this.popoverCtr.create({
+  ngOnInit() {
+    this.getListData();
+  }
+
+
+  getListData() {
+    this.httpService.get("shopping/getShoppingLists").subscribe((rs: any) => {
+      this.listArray = rs;
+      this.changeDetection.detectChanges();
+      this.shoppingListData.currentNameSubject$.next(this.listArray);
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  async editListName(list) {
+    const popover = await this.popoverCtr.create({
       component: EditListPage,
       cssClass: 'my-custom-class',
       componentProps: { ID: list.ID, ListName: list.listName }
-    }).then(popOverResp => {
-      popOverResp.present();
-    })
+    });
+    popover.present();
+    this.closeList();
+    // listens to promise? Or return response?
+    return popover.onDidDismiss().then(
+      (data: any) => {
+        if (data) {
+          this.getListData();
+        }
+      });
   }
 
+
+
   deleteList(ID) {
-    this.listArray = this.listArray.filter(listArray => listArray.ID !== ID);
-    this.changeDetection.detectChanges();
+    // this.listArray = this.listArray.filter(listArray => listArray.ID !== ID);
+    this.httpService.get("shopping/deleteList?ID=" + ID).subscribe((rs: any) => {
+      this.listArray = rs;
+      this.getListData();
+    }, (err) => {
+      console.log(err);
+    });
   }
+
 
   async presentDeleteConfirm(ID) {
     const alert = await this.alertController.create({
@@ -76,20 +97,30 @@ export class HomePage implements OnInit {
 
   addList() {
     if (this.listInput != "") {
-      let obj: any = {};
-      obj.listName = this.listInput;
-      this.listArray.push(obj);
-      this.listInput = "";
+      this.httpService.post("shopping/addList", { listName: this.listInput }).subscribe((rs: any) => {
+        if (rs == 1) {
+          this.getListData();
+          console.log("Success")
+        } else {
+          console.log("Error")
+        }
+      }, (err: any) => {
+        console.log("Error")
+      });
     }
+    this.listInput = "";
   }
+
 
   closeList() {
     this.list.closeSlidingItems();
   }
 
+
   toAddingItems(list) {
     if (this.addItemsClicked == true) {
       this.shoppingListData.shoppingListClicked = list;
+      debugger;
       this.router.navigate(['/add-item']);
     }
   }

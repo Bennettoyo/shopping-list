@@ -20,6 +20,7 @@ export class AddItemPage implements OnInit {
 
   ngOnInit() {
     this.listDetails = this.shoppingListData.shoppingListClicked;
+    debugger;
     console.log(this.listDetails);
   }
 
