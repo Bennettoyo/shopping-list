@@ -120,7 +120,6 @@ export class HomePage implements OnInit {
   toAddingItems(list) {
     if (this.addItemsClicked == true) {
       this.shoppingListData.shoppingListClicked = list;
-      debugger;
       this.router.navigate(['/add-item']);
     }
   }

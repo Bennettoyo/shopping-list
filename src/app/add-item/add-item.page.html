@@ -10,7 +10,7 @@
 <ion-content [fullscreen]="true">
   <!-- Item has not been checked off -->
   <ion-list #slidingList>
-    <ng-container *ngFor="let item of listDetails.Items">
+    <ng-container *ngFor="let item of shoppingItems">
       <ion-item-sliding *ngIf="item.Status == 0">
         <ion-item>
           <ion-checkbox slot="start" [(ngModel)]="item.Status"></ion-checkbox>
@@ -32,7 +32,7 @@
   </ion-list>
   <!-- Item has been checked off -->
   <ion-list #slidingList>
-    <ng-container *ngFor="let item of listDetails.Items">
+    <ng-container *ngFor="let item of shoppingItems">
       <ion-item-sliding *ngIf="item.Status == 1">
         <ion-item>
           <ion-checkbox slot="start" [(ngModel)]="item.Status"></ion-checkbox>
@@ -52,16 +52,11 @@
       </ion-item-sliding>
     </ng-container>
   </ion-list>
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="addList()" color="light">
-      <ion-icon size="large" name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
 </ion-content>
 <ion-footer>
   <ion-toolbar>
     <ion-input [(ngModel)]="itemInput" placeholder="Enter text to add shopping items..." maxlength="40"
-      (keyup.enter)="addList()">
+      (keyup.enter)="addItem()">
     </ion-input>
   </ion-toolbar>
 </ion-footer>

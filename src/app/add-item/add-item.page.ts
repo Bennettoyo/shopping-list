@@ -4,6 +4,7 @@ import { IonList, ModalController, PopoverController } from '@ionic/angular';
 import { AddListPage } from '../add-list/add-list.page';
 import { EditListPage } from '../edit-list/edit-list.page';
 import { AlertController } from '@ionic/angular';
+import { HttpService } from '../http.service';
 
 
 @Component({
@@ -14,14 +15,23 @@ import { AlertController } from '@ionic/angular';
 export class AddItemPage implements OnInit {
 
   public listDetails: any;
+  public shoppingItems: any;
   public itemInput: any;
 
-  constructor(private modalCtr: ModalController, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) { }
+  constructor(private modalCtr: ModalController, private httpService: HttpService, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.listDetails = this.shoppingListData.shoppingListClicked;
     debugger;
-    console.log(this.listDetails);
+    this.getItemsData();
+  }
+
+  getItemsData() {
+    this.httpService.get("shopping/getShoppingItems?ID=" + this.listDetails.ID).subscribe((rs: any) => {
+      this.shoppingItems = rs;
+    }, (err) => {
+      console.log(err);
+    });
   }
 
   openModal() {
@@ -44,18 +54,22 @@ export class AddItemPage implements OnInit {
   }
 
 
-  addList() {
+  addItem() {
     if (this.itemInput != "") {
-      let obj: any = {};
-      obj.itemName = this.itemInput;
-      obj.ID = 4;
-      obj.Status = 0;
-      // this.listDetails.Items.push(obj);
-      this.itemInput = "";
-      this.shoppingListData.shoppingItem = obj;
-
-      this.openModal();
+      this.httpService.post("shopping/addItem", { itemName: this.itemInput, ShoppingListID: this.listDetails.ID }).subscribe((rs: any) => {
+        if (rs == 1) {
+          this.getItemsData();
+          this.itemInput = "";
+          console.log("Success")
+        } else {
+          console.log("Error")
+        }
+      }, (err: any) => {
+        console.log("Error")
+      });
     }
+    // for adding icons
+    // this.openModal();
   }
 
   closeList() {
