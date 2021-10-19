@@ -3,14 +3,16 @@ import { PopoverController } from '@ionic/angular';
 import { HttpService } from '../http.service';
 
 @Component({
-  selector: 'app-edit-list',
-  templateUrl: './edit-list.page.html',
-  styleUrls: ['./edit-list.page.scss'],
+  selector: 'app-edit-item',
+  templateUrl: './edit-item.page.html',
+  styleUrls: ['./edit-item.page.scss'],
 })
-export class EditListPage implements OnInit {
-  @Input() ListName: string;
+
+export class EditItemPage implements OnInit {
+
+  @Input() ItemName: string;
   @Input() ID: number;
-  public listArray: any;
+  public itemArray: any;
 
 
   constructor(private popover: PopoverController, private httpService: HttpService) { }
@@ -19,8 +21,8 @@ export class EditListPage implements OnInit {
   }
 
   editListName() {
-    if (this.ListName.length > 0) {
-      this.httpService.post("shopping/editListName", { listName: this.ListName, ID: this.ID }).subscribe((rs: any) => {
+    if (this.ItemName.length > 0) {
+      this.httpService.post("shopping/editItemName", { itemName: this.ItemName, ID: this.ID }).subscribe((rs: any) => {
         if (rs == 1) {
           // console.log("Success")
         } else {
@@ -32,4 +34,6 @@ export class EditListPage implements OnInit {
       this.popover.dismiss({ data: true });
     }
   }
+
+
 }
