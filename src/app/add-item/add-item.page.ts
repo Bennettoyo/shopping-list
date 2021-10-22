@@ -38,12 +38,36 @@ export class AddItemPage implements OnInit {
     });
   }
 
-  openModal() {
-    this.modalCtr.create({
-      component: AddListPage
-    }).then(modalres => {
-      modalres.present();
+  async openModal() {
+    const modal = await this.modalCtr.create({
+      component: AddListPage,
+      cssClass: 'my-custom-class',
+      componentProps: { ItemName: this.itemInput }
     })
+    modal.present();
+    // listens to promise? Or return response?
+    return modal.onDidDismiss().then(
+      (data: any) => {
+        if (data) {
+          this.addItem();
+        }
+      });
+  }
+
+  addItem() {
+    if (this.itemInput != "") {
+      this.httpService.post("shopping/addItem", { itemName: this.itemInput, ShoppingListID: this.listDetails.ID }).subscribe((rs: any) => {
+        if (rs == 1) {
+          this.getItemsData();
+          this.itemInput = "";
+          console.log("Success")
+        } else {
+          console.log("Error")
+        }
+      }, (err: any) => {
+        console.log("Error")
+      });
+    }
   }
 
 
@@ -96,25 +120,6 @@ export class AddItemPage implements OnInit {
       ]
     });
     await alert.present();
-  }
-
-
-  addItem() {
-    if (this.itemInput != "") {
-      this.httpService.post("shopping/addItem", { itemName: this.itemInput, ShoppingListID: this.listDetails.ID }).subscribe((rs: any) => {
-        if (rs == 1) {
-          this.getItemsData();
-          this.itemInput = "";
-          console.log("Success")
-        } else {
-          console.log("Error")
-        }
-      }, (err: any) => {
-        console.log("Error")
-      });
-    }
-    // for adding icons
-    // this.openModal();
   }
 
   closeListItem() {

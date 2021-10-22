@@ -16,7 +16,7 @@
 @import "~@ionic/angular/css/normalize.css";
 @import "~@ionic/angular/css/structure.css";
 @import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
+@import "~@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "~@ionic/angular/css/padding.css";
@@ -25,7 +25,6 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-
 .my-custom-class .popover-content {
   --width: 70vw;
   --height: 20vh;
@@ -33,4 +32,84 @@
 
 .line-through {
   text-decoration: line-through;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.p-t-50 {
+  padding-top: 50px;
+}
+
+.icon-size {
+  font-size: 5rem;
+}
+
+.meat-icon {
+  color: red;
+}
+
+.fish-icon {
+  color: blue;
+}
+
+.dairy-icon {
+  color: yellow;
+}
+
+.produce-icon {
+  color: orange;
+}
+
+.frozen-icon {
+  color: lightblue;
+}
+
+.drinks-icon {
+  color: turquoise;
+}
+
+.hotDrinks-icon {
+  color: red;
+}
+
+.alcohol-icon {
+  color: purple;
+}
+
+.bakery-icon {
+  color: brown;
+}
+
+.snack-icon {
+  color: pink;
+}
+
+.spices-icon {
+  color: red;
+}
+
+.cleaning-icon {
+  color: lightgrey;
+}
+
+.clothes-icon {
+  color: brown;
+}
+
+.general-icon {
+  color: green;
+}
+
+.medicine-icon {
+  color: blue;
+}
+
+.pet-icon {
+  color: brown;
+}
+
+.other-icon {
+  color: gray;
 }
