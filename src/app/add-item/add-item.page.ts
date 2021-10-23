@@ -7,6 +7,24 @@ import { EditListPage } from '../edit-list/edit-list.page';
 import { AlertController } from '@ionic/angular';
 import { HttpService } from '../http.service';
 
+import { faDrumstickBite } from '@fortawesome/free-solid-svg-icons';
+import { faFish } from '@fortawesome/free-solid-svg-icons';
+import { faCheese } from '@fortawesome/free-solid-svg-icons';
+import { faCarrot } from '@fortawesome/free-solid-svg-icons';
+import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
+import { faTint } from '@fortawesome/free-solid-svg-icons';
+import { faMugHot } from '@fortawesome/free-solid-svg-icons';
+import { faWineGlassAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBreadSlice } from '@fortawesome/free-solid-svg-icons';
+import { faCookieBite } from '@fortawesome/free-solid-svg-icons';
+import { faPepperHot } from '@fortawesome/free-solid-svg-icons';
+import { faPumpSoap } from '@fortawesome/free-solid-svg-icons';
+import { faTshirt } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingBasket } from '@fortawesome/free-solid-svg-icons';
+import { faPills } from '@fortawesome/free-solid-svg-icons';
+import { faPaw } from '@fortawesome/free-solid-svg-icons';
+import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-add-item',
@@ -18,6 +36,25 @@ export class AddItemPage implements OnInit {
   public listDetails: any;
   public shoppingItems: any;
   public itemInput: any;
+
+  meat = faDrumstickBite;
+  fish = faFish;
+  dairy = faCheese;
+  produce = faCarrot;
+  frozen = faSnowflake;
+  drinks = faTint;
+  hotDrinks = faMugHot;
+  alcohol = faWineGlassAlt;
+  bakery = faBreadSlice;
+  snack = faCookieBite;
+  spices = faPepperHot;
+  cleaning = faPumpSoap;
+  clothes = faTshirt;
+  general = faShoppingBasket;
+  medicine = faPills;
+  pet = faPaw;
+  other = faQuestion;
+
 
   @ViewChild("slidingList") list: IonList;
 
@@ -49,14 +86,14 @@ export class AddItemPage implements OnInit {
     return modal.onDidDismiss().then(
       (data: any) => {
         if (data) {
-          this.addItem();
+          this.addItem(data.data.ChosenCategory);
         }
       });
   }
 
-  addItem() {
+  addItem(ChosenCategory) {
     if (this.itemInput != "") {
-      this.httpService.post("shopping/addItem", { itemName: this.itemInput, ShoppingListID: this.listDetails.ID }).subscribe((rs: any) => {
+      this.httpService.post("shopping/addItem", { itemName: this.itemInput, ShoppingListID: this.listDetails.ID, Category: ChosenCategory }).subscribe((rs: any) => {
         if (rs == 1) {
           this.getItemsData();
           this.itemInput = "";
@@ -124,6 +161,88 @@ export class AddItemPage implements OnInit {
 
   closeListItem() {
     this.list.closeSlidingItems();
+  }
+
+  getIconColour(icon) {
+    switch (icon) {
+      case "meat":
+        return "meat-icon";
+      case "fish":
+        return "fish-icon";
+      case "dairy":
+        return "dairy-icon";
+      case "produce":
+        return "produce-icon";
+      case "frozen":
+        return "frozen-icon";
+      case "drinks":
+        return "drinks-icon";
+      case "hotDrinks":
+        return "hotDrinks-icon";
+      case "alcohol":
+        return "alcohol-icon";
+      case "bakery":
+        return "bakery-icon";
+      case "snack":
+        return "snack-icon";
+      case "spices":
+        return "spices-icon";
+      case "cleaning":
+        return "cleaning-icon";
+      case "clothes":
+        return "clothes-icon";
+      case "general":
+        return "general-icon";
+      case "medicine":
+        return "medicine-icon";
+      case "pet":
+        return "pet-icon";
+      case "other":
+        return "other-icon";
+      default:
+        break;
+    }
+  }
+
+  iconMatching(icon) {
+    switch (icon) {
+      case "meat":
+        return this.meat;
+      case "fish":
+        return this.fish;
+      case "dairy":
+        return this.dairy;
+      case "produce":
+        return this.produce;
+      case "frozen":
+        return this.frozen;
+      case "drinks":
+        return this.drinks;
+      case "hotDrinks":
+        return this.hotDrinks;
+      case "alcohol":
+        return this.meat;
+      case "bakery":
+        return this.bakery;
+      case "snack":
+        return this.snack;
+      case "spices":
+        return this.spices;
+      case "cleaning":
+        return this.cleaning;
+      case "clothes":
+        return this.clothes;
+      case "general":
+        return this.general;
+      case "medicine":
+        return this.medicine;
+      case "pet":
+        return this.pet;
+      case "other":
+        return this.other;
+      default:
+        break;
+    }
   }
 
 }

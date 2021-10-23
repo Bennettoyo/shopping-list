@@ -52,7 +52,11 @@ export class AddListPage implements OnInit {
   ngOnInit() {
   }
 
-  close() {
-    this.modalCtrl.dismiss({ data: true });
+  // close() {
+  //   this.modalCtrl.dismiss({ data: true });
+  // }
+
+  chosenCategory(chosenCategory) {
+    this.modalCtrl.dismiss({ ChosenCategory: chosenCategory });
   }
 }
