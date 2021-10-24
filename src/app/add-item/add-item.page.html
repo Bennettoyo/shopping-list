@@ -13,9 +13,9 @@
     <ng-container *ngFor="let item of shoppingItems">
       <ion-item-sliding *ngIf="item.Status == 0">
         <ion-item>
-          <ion-checkbox slot="start" [(ngModel)]="item.Status"></ion-checkbox>
+          <ion-checkbox slot="start" (click)="isChecked(item)" [(ngModel)]="item.Status"></ion-checkbox>
           <ion-label>{{item.itemName}}</ion-label>
-          <fa-icon [ngClass]="getIconColour(item.Category)" class="item-icon-size" [icon]="iconMatching(item.Category)">
+          <fa-icon (click)="editCategoryIcon(item)" [ngClass]="getIconColour(item.Category)" class="item-icon-size" [icon]="iconMatching(item.Category)">
           </fa-icon>
         </ion-item>
         <ion-item-options side="end">
@@ -33,11 +33,11 @@
     </ng-container>
   </ion-list>
   <!-- Item has been checked off -->
-  <ion-list #slidingList>
+  <ion-list class="m-t-40" #slidingList>
     <ng-container *ngFor="let item of shoppingItems">
       <ion-item-sliding *ngIf="item.Status == 1">
         <ion-item>
-          <ion-checkbox slot="start" [(ngModel)]="item.Status"></ion-checkbox>
+          <ion-checkbox slot="start" (click)="isChecked(item)" [(ngModel)]="item.Status"></ion-checkbox>
           <ion-label class="line-through">{{item.itemName}}</ion-label>
           <fa-icon [ngClass]="getIconColour(item.Category)" class="item-icon-size" [icon]="iconMatching(item.Category)">
           </fa-icon>

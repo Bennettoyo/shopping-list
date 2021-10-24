@@ -75,6 +75,11 @@ export class AddItemPage implements OnInit {
     });
   }
 
+  editCategoryIcon(item) {
+    console.log("called");
+    this.openModal();
+  }
+
   async openModal() {
     const modal = await this.modalCtr.create({
       component: AddListPage,
@@ -128,6 +133,23 @@ export class AddItemPage implements OnInit {
 
   deleteListItem(ID) {
     this.httpService.get("shopping/deleteItem?ID=" + ID).subscribe((rs: any) => {
+      if (rs == 1) {
+        console.log("all good");
+        // this.closeList();
+        this.getItemsData();
+      }
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  isChecked(item) {
+    if (item.Status == 1) {
+      item.Status = 0
+    } else {
+      item.Status = 1
+    }
+    this.httpService.get("shopping/checkedItem?ID=" + item.ID + "&Status=" + item.Status).subscribe((rs: any) => {
       if (rs == 1) {
         console.log("all good");
         // this.closeList();
