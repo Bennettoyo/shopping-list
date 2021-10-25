@@ -14,8 +14,8 @@
       <ion-item-sliding *ngIf="item.Status == 0">
         <ion-item>
           <ion-checkbox slot="start" (click)="isChecked(item)" [(ngModel)]="item.Status"></ion-checkbox>
-          <ion-label>{{item.itemName}}</ion-label>
-          <fa-icon (click)="editCategoryIcon(item)" [ngClass]="getIconColour(item.Category)" class="item-icon-size" [icon]="iconMatching(item.Category)">
+          <ion-label class="width-20percent">{{item.itemName}}</ion-label>
+          <fa-icon (click)="editCategoryIcon(item)" style="z-index: 999999999;" [ngClass]="getIconColour(item.Category)" class="item-icon-size" [icon]="iconMatching(item.Category)">
           </fa-icon>
         </ion-item>
         <ion-item-options side="end">
