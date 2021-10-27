@@ -36,6 +36,8 @@ export class AddItemPage implements OnInit {
   public listDetails: any;
   public shoppingItems: any;
   public itemInput: any;
+  public itemId: any;
+  public editedCategoryName: any;
 
   meat = faDrumstickBite;
   fish = faFish;
@@ -76,29 +78,37 @@ export class AddItemPage implements OnInit {
   }
 
   editCategoryIcon(item) {
-    console.log("called");
+    this.itemId = item.ID;
+    this.editedCategoryName = item.itemName;
     this.openModal();
   }
 
   async openModal() {
+    let itemName;
+    if (this.itemInput == "") {
+      itemName = this.editedCategoryName;
+    } else {
+      itemName = this.itemInput;
+    }
     const modal = await this.modalCtr.create({
       component: AddListPage,
       cssClass: 'my-custom-class',
-      componentProps: { ItemName: this.itemInput }
+      componentProps: { ItemName: itemName, ItemId: this.itemId }
     })
+    this.editedCategoryName = "";
+    this.itemInput = "";
     modal.present();
-    // listens to promise? Or return response?
     return modal.onDidDismiss().then(
       (data: any) => {
         if (data) {
-          this.addItem(data.data.ChosenCategory);
+          this.addItem(data.data);
         }
       });
   }
 
-  addItem(ChosenCategory) {
-    if (this.itemInput != "") {
-      this.httpService.post("shopping/addItem", { itemName: this.itemInput, ShoppingListID: this.listDetails.ID, Category: ChosenCategory }).subscribe((rs: any) => {
+  addItem(editedItem) {
+    if (editedItem.ItemName != "") {
+      this.httpService.post("shopping/addItem", { itemName: editedItem.ItemName, ShoppingListID: this.listDetails.ID, Category: editedItem.ChosenCategory, ID: editedItem.ItemID }).subscribe((rs: any) => {
         if (rs == 1) {
           this.getItemsData();
           this.itemInput = "";
