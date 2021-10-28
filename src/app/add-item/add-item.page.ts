@@ -84,16 +84,16 @@ export class AddItemPage implements OnInit {
   }
 
   async openModal() {
-    let itemName;
-    if (this.itemInput == "") {
-      itemName = this.editedCategoryName;
+    let ItemName;
+    if (this.itemInput == "" || this.itemInput == null) {
+      ItemName = this.editedCategoryName;
     } else {
-      itemName = this.itemInput;
+      ItemName = this.itemInput;
     }
     const modal = await this.modalCtr.create({
       component: AddListPage,
       cssClass: 'my-custom-class',
-      componentProps: { ItemName: itemName, ItemId: this.itemId }
+      componentProps: { ItemName: ItemName, ItemId: this.itemId }
     })
     this.editedCategoryName = "";
     this.itemInput = "";
@@ -120,8 +120,8 @@ export class AddItemPage implements OnInit {
         console.log("Error")
       });
     }
+    this.itemId = "";
   }
-
 
   async editItemName(item) {
     const popover = await this.popoverCtr.create({
