@@ -15,7 +15,8 @@
         <ion-item>
           <ion-checkbox slot="start" (click)="isChecked(item)" [(ngModel)]="item.Status"></ion-checkbox>
           <ion-label class="width-20percent">{{item.itemName}}</ion-label>
-          <fa-icon (click)="editCategoryIcon(item)" style="z-index: 999999999;" [ngClass]="getIconColour(item.Category)" class="item-icon-size" [icon]="iconMatching(item.Category)">
+          <fa-icon (click)="editCategoryIcon(item)" style="z-index: 999999999;" [ngClass]="getIconColour(item.Category)"
+            class="item-icon-size" [icon]="iconMatching(item.Category)">
           </fa-icon>
         </ion-item>
         <ion-item-options side="end">
@@ -57,11 +58,23 @@
     </ng-container>
   </ion-list>
 
+  <ion-card>
+    <ion-card-header>This is what I understood...</ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item (click)="addAudioResult(match)" *ngFor="let match of matches">
+          {{match}}
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
 <ion-footer>
   <ion-toolbar>
     <ion-input [(ngModel)]="itemInput" placeholder="Enter text to add shopping items..." maxlength="40"
       (keyup.enter)="openModal()">
     </ion-input>
+    <ion-icon (click)="checkListening()" slot="end" size="large" name="mic-outline"></ion-icon>
   </ion-toolbar>
 </ion-footer>

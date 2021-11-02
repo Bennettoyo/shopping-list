@@ -36,7 +36,7 @@
               "src/global.scss"
             ],
             "scripts": [
-              "src/assets/js/annyang.min.js"
+
             ],
             "aot": false,
             "vendorChunk": true,

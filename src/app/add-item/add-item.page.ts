@@ -6,6 +6,9 @@ import { AddListPage } from '../add-list/add-list.page';
 import { EditListPage } from '../edit-list/edit-list.page';
 import { AlertController } from '@ionic/angular';
 import { HttpService } from '../http.service';
+import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
+
+
 
 import { faDrumstickBite } from '@fortawesome/free-solid-svg-icons';
 import { faFish } from '@fortawesome/free-solid-svg-icons';
@@ -38,6 +41,7 @@ export class AddItemPage implements OnInit {
   public itemInput: any;
   public itemId: any;
   public editedCategoryName: any;
+  public showAudioResult = false;
 
   meat = faDrumstickBite;
   fish = faFish;
@@ -58,10 +62,41 @@ export class AddItemPage implements OnInit {
   other = faQuestion;
 
 
+  matches: string[];
+
+
   @ViewChild("slidingList") list: IonList;
 
 
-  constructor(private modalCtr: ModalController, private httpService: HttpService, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) { }
+  constructor(private SpeechRecognition: SpeechRecognition, private modalCtr: ModalController, private httpService: HttpService, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) { }
+
+  checkListening() {
+    window.scrollTo(0, document.body.scrollHeight);
+    // this.SpeechRecognition.hasPermission()
+    //   .then((hasPermission: Boolean) => {
+    //     if (!hasPermission) {
+    //       this.SpeechRecognition.requestPermission();
+    //     } else {
+    //       this.startListening();
+    //     }
+    //   })
+  }
+
+  startListening() {
+    let options = {
+      language: 'en-US'
+    }
+    this.SpeechRecognition.startListening().subscribe(matches => {
+      this.matches = matches;
+      this.changeDetection.detectChanges();
+      this.showAudioResult = true;
+    });
+  }
+
+  addAudioResult(audioResult) {
+    this.editedCategoryName = audioResult;
+    this.openModal();
+  }
 
   ngOnInit() {
     this.listDetails = this.shoppingListData.shoppingListClicked;

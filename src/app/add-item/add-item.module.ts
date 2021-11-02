@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
+
 
 
 import { IonicModule } from '@ionic/angular';
@@ -16,8 +18,10 @@ import { AddItemPage } from './add-item.page';
     FormsModule,
     IonicModule,
     FontAwesomeModule,
-    AddItemPageRoutingModule
+    AddItemPageRoutingModule,
   ],
-  declarations: [AddItemPage]
+  declarations: [AddItemPage],
+  providers: [{ provide: SpeechRecognition }],
+
 })
-export class AddItemPageModule {}
+export class AddItemPageModule { }
