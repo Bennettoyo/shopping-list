@@ -66,30 +66,29 @@ export class AddItemPage implements OnInit {
 
 
   @ViewChild("slidingList") list: IonList;
+  @ViewChild('content') private content: any;
+
 
 
   constructor(private SpeechRecognition: SpeechRecognition, private modalCtr: ModalController, private httpService: HttpService, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) { }
 
   checkListening() {
-    window.scrollTo(0, document.body.scrollHeight);
-    // this.SpeechRecognition.hasPermission()
-    //   .then((hasPermission: Boolean) => {
-    //     if (!hasPermission) {
-    //       this.SpeechRecognition.requestPermission();
-    //     } else {
-    //       this.startListening();
-    //     }
-    //   })
+    this.SpeechRecognition.hasPermission()
+      .then((hasPermission: Boolean) => {
+        if (!hasPermission) {
+          this.SpeechRecognition.requestPermission().then(
+            () => this.startListening()
+          );
+        } else {
+          this.startListening();
+        }
+      })
   }
 
   startListening() {
-    let options = {
-      language: 'en-US'
-    }
     this.SpeechRecognition.startListening().subscribe(matches => {
       this.matches = matches;
-      this.changeDetection.detectChanges();
-      this.showAudioResult = true;
+      this.addAudioResult(this.matches[0].toString());
     });
   }
 

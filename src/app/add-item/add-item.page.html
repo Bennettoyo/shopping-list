@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content #content [fullscreen]="true">
   <!-- Item has not been checked off -->
   <ion-list #slidingList>
     <ng-container *ngFor="let item of shoppingItems">
@@ -58,23 +58,12 @@
     </ng-container>
   </ion-list>
 
-  <ion-card>
-    <ion-card-header>This is what I understood...</ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item (click)="addAudioResult(match)" *ngFor="let match of matches">
-          {{match}}
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-
 </ion-content>
 <ion-footer>
   <ion-toolbar>
     <ion-input [(ngModel)]="itemInput" placeholder="Enter text to add shopping items..." maxlength="40"
       (keyup.enter)="openModal()">
     </ion-input>
-    <ion-icon (click)="checkListening()" slot="end" size="large" name="mic-outline"></ion-icon>
+    <ion-icon class="m-r-10" (click)="checkListening()" slot="end" size="large" name="mic-outline"></ion-icon>
   </ion-toolbar>
 </ion-footer>
