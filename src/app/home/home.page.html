@@ -9,8 +9,7 @@
 
 <ion-content [fullscreen]="true">
   <ion-list #slidingList>
-    <!-- <ion-item-sliding (click)="toAddingItems(list); this.addItemsClicked = true" *ngFor="let list of listArray"> -->
-    <ion-item-sliding (click)="toAddingItems(list)" *ngFor="let list of listArray">
+    <ion-item-sliding (click)="toAddingItems(list); this.addItemsClicked = true" *ngFor="let list of listArray">
       <ion-item>
         <ion-label>{{list.listName}}</ion-label>
       </ion-item>

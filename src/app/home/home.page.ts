@@ -123,11 +123,11 @@ export class HomePage implements OnInit {
 
 
   toAddingItems(list) {
-    // if (this.addItemsClicked == true) {
+    if (this.addItemsClicked == true) {
       list = JSON.stringify(list);
       this.storage.setLocalStorage("listDetails", list);
       this.router.navigate(['/add-item']);
-    // }
+    }
   }
 
 }
