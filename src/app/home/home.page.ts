@@ -6,6 +6,7 @@ import { EditListPage } from '../edit-list/edit-list.page';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpService } from '../http.service';
+import { StorageService } from '../storage.service';
 
 
 @Component({
@@ -20,10 +21,13 @@ export class HomePage implements OnInit {
   public listArray: any = [];
   public listInput: any = "";
   public addItemsClicked: any = false;
+  public networkStatus: any = false;
+  public onlineOffline: boolean = navigator.onLine;
+
 
   @ViewChild("slidingList") list: IonList;
 
-  constructor(private modalCtr: ModalController, private httpService: HttpService, private router: Router, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) {
+  constructor(private storage: StorageService, private modalCtr: ModalController, private httpService: HttpService, private router: Router, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) {
   }
 
 
@@ -35,6 +39,8 @@ export class HomePage implements OnInit {
   getListData() {
     this.httpService.get("shopping/getShoppingLists").subscribe((rs: any) => {
       this.listArray = rs;
+      let listArrayHolder = JSON.stringify(this.listArray);
+      this.storage.setLocalStorage("listArray", listArrayHolder);
       this.changeDetection.detectChanges();
       this.shoppingListData.currentNameSubject$.next(this.listArray);
     }, (err) => {
@@ -50,7 +56,6 @@ export class HomePage implements OnInit {
     });
     popover.present();
     this.closeList();
-    // listens to promise? Or return response?
     return popover.onDidDismiss().then(
       (data: any) => {
         if (data) {
@@ -118,10 +123,11 @@ export class HomePage implements OnInit {
 
 
   toAddingItems(list) {
-    if (this.addItemsClicked == true) {
-      this.shoppingListData.shoppingListClicked = list;
+    // if (this.addItemsClicked == true) {
+      list = JSON.stringify(list);
+      this.storage.setLocalStorage("listDetails", list);
       this.router.navigate(['/add-item']);
-    }
+    // }
   }
 
 }

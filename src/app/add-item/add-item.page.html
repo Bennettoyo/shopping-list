@@ -15,15 +15,17 @@
         <ion-item>
           <ion-checkbox slot="start" (click)="isChecked(item)" [(ngModel)]="item.Status"></ion-checkbox>
           <ion-label class="width-20percent">{{item.itemName}}</ion-label>
-          <fa-icon (click)="editCategoryIcon(item)" style="z-index: 999999999;" [ngClass]="getIconColour(item.Category)"
+          <!-- <fa-icon (click)="editCategoryIcon(item)" style="z-index: 999999999;" [ngClass]="getIconColour(item.Category)"
             class="item-icon-size" [icon]="iconMatching(item.Category)">
-          </fa-icon>
+          </fa-icon> -->
+          <img class="item-icon-size" src="'../../assets/icon/{{item.Category}}.svg" alt="{{item.Category}}"
+            (click)="editCategoryIcon(item)" style="z-index: 999999999;">
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option (click)="editItemName(item)">
+          <ion-item-option class="edit-button" (click)="editItemName(item)">
             <ion-icon size="large" name="create-outline"></ion-icon>
           </ion-item-option>
-          <ion-item-option (click)="presentDeleteConfirm(item.ID)">
+          <ion-item-option class="delete-button" (click)="presentDeleteConfirm(item.ID)">
             <ion-icon size="large" name="trash-outline"></ion-icon>
           </ion-item-option>
           <ion-item-option (click)="closeListItem()">
@@ -34,20 +36,22 @@
     </ng-container>
   </ion-list>
   <!-- Item has been checked off -->
-  <ion-list class="m-t-40" #slidingList>
+  <ion-list [ngClass]="noItemsLeft ? '' : 'm-t-40'" #slidingList>
     <ng-container *ngFor="let item of shoppingItems">
       <ion-item-sliding *ngIf="item.Status == 1">
         <ion-item>
           <ion-checkbox slot="start" (click)="isChecked(item)" [(ngModel)]="item.Status"></ion-checkbox>
           <ion-label class="line-through">{{item.itemName}}</ion-label>
-          <fa-icon [ngClass]="getIconColour(item.Category)" class="item-icon-size" [icon]="iconMatching(item.Category)">
-          </fa-icon>
+          <!-- <fa-icon [ngClass]="getIconColour(item.Category)" class="item-icon-size" [icon]="iconMatching(item.Category)">
+          </fa-icon> -->
+          <img class="item-icon-size" src="'../../assets/icon/{{item.Category}}.svg" alt="{{item.Category}}"
+            (click)="editCategoryIcon(item)" style="z-index: 999999999;">
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option (click)="editItemName(item)">
+          <ion-item-option class="edit-button" (click)="editItemName(item)">
             <ion-icon size="large" name="create-outline"></ion-icon>
           </ion-item-option>
-          <ion-item-option (click)="presentDeleteConfirm(item.ID)">
+          <ion-item-option class="delete-button" (click)="presentDeleteConfirm(item.ID)">
             <ion-icon size="large" name="trash-outline"></ion-icon>
           </ion-item-option>
           <ion-item-option (click)="closeListItem()">

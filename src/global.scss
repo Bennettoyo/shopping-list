@@ -54,13 +54,23 @@ label {
   width: 20% !important;
 }
 
-
 .item-icon-size {
-  font-size: 2rem;
+  height: 40px;
 }
 
 .icon-size {
   font-size: 5rem;
+}
+
+.delete-button {
+  background: #d11a2a;
+}
+
+.edit-button {
+  background: #4bb543;
+}
+
+.cancel-button {
 }
 
 .meat-icon {
@@ -129,4 +139,8 @@ label {
 
 .other-icon {
   color: gray;
+}
+
+.img-size {
+  height: 90px;
 }

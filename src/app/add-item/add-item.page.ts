@@ -27,6 +27,7 @@ import { faShoppingBasket } from '@fortawesome/free-solid-svg-icons';
 import { faPills } from '@fortawesome/free-solid-svg-icons';
 import { faPaw } from '@fortawesome/free-solid-svg-icons';
 import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { StorageService } from '../storage.service';
 
 
 @Component({
@@ -42,6 +43,9 @@ export class AddItemPage implements OnInit {
   public itemId: any;
   public editedCategoryName: any;
   public showAudioResult = false;
+  public noItemsLeft = false;
+  public onlineOffline: boolean = navigator.onLine;
+
 
   meat = faDrumstickBite;
   fish = faFish;
@@ -70,7 +74,13 @@ export class AddItemPage implements OnInit {
 
 
 
-  constructor(private SpeechRecognition: SpeechRecognition, private modalCtr: ModalController, private httpService: HttpService, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) { }
+  constructor(private storage: StorageService, private SpeechRecognition: SpeechRecognition, private modalCtr: ModalController, private httpService: HttpService, private popoverCtr: PopoverController, private shoppingListData: ShoppingListsService, private alertController: AlertController, private changeDetection: ChangeDetectorRef) { }
+
+  ngOnInit() {
+    let list = this.storage.getLocalStorage("listDetails");
+    this.listDetails = JSON.parse(list);
+    this.getItemsData();
+  }
 
   checkListening() {
     this.SpeechRecognition.hasPermission()
@@ -97,15 +107,13 @@ export class AddItemPage implements OnInit {
     this.openModal();
   }
 
-  ngOnInit() {
-    this.listDetails = this.shoppingListData.shoppingListClicked;
-    this.getItemsData();
-  }
-
   getItemsData() {
     this.httpService.get("shopping/getShoppingItems?ID=" + this.listDetails.ID).subscribe((rs: any) => {
       this.shoppingItems = rs;
+      let shoppingItems = JSON.stringify(this.shoppingItems);
+      this.storage.setLocalStorage("shoppingItems", shoppingItems);
       this.changeDetection.detectChanges();
+      this.checkingItemsLeft();
     }, (err) => {
       console.log(err);
     });
@@ -146,12 +154,12 @@ export class AddItemPage implements OnInit {
         if (rs == 1) {
           this.getItemsData();
           this.itemInput = "";
-          console.log("Success")
+          // console.log("Success")
         } else {
-          console.log("Error")
+          // console.log("Error")
         }
       }, (err: any) => {
-        console.log("Error")
+        // console.log("Error")
       });
     }
     this.itemId = "";
@@ -178,13 +186,23 @@ export class AddItemPage implements OnInit {
   deleteListItem(ID) {
     this.httpService.get("shopping/deleteItem?ID=" + ID).subscribe((rs: any) => {
       if (rs == 1) {
-        console.log("all good");
+        // console.log("all good");
         // this.closeList();
         this.getItemsData();
+        this.checkingItemsLeft();
       }
     }, (err) => {
       console.log(err);
     });
+  }
+
+  checkingItemsLeft() {
+    const anyItemsLeft = this.shoppingItems.filter(e => e.Status == 0);
+    if (anyItemsLeft.length == 0) {
+      this.noItemsLeft = true;
+    } else {
+      this.noItemsLeft = false;
+    }
   }
 
   isChecked(item) {
@@ -193,11 +211,18 @@ export class AddItemPage implements OnInit {
     } else {
       item.Status = 1
     }
+    this.checkingItemsLeft();
+    const anyItemsLeft = this.shoppingItems.filter(e => e.Status == 0);
+    if (anyItemsLeft.length == 0) {
+      this.noItemsLeft = true;
+    } else {
+      this.noItemsLeft = false;
+    }
     this.httpService.get("shopping/checkedItem?ID=" + item.ID + "&Status=" + item.Status).subscribe((rs: any) => {
       if (rs == 1) {
-        console.log("all good");
+        // console.log("all good");
         // this.closeList();
-        this.getItemsData();
+        // this.getItemsData();
       }
     }, (err) => {
       console.log(err);
@@ -251,7 +276,7 @@ export class AddItemPage implements OnInit {
         return "bakery-icon";
       case "snack":
         return "snack-icon";
-      case "spices":
+      case "condiments":
         return "spices-icon";
       case "cleaning":
         return "cleaning-icon";
