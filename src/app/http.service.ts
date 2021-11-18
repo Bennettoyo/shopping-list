@@ -8,8 +8,8 @@ import { timeout } from 'rxjs/operators';
 })
 export class HttpService {
 
-  //   private server = 'http://localhost:51730/';
-  private server = 'https://shoppinglist.jackbennetto.co.uk/';
+    private server = 'http://localhost:51730/';
+  // private server = 'https://shoppinglist.jackbennetto.co.uk/';
   private host = this.server + 'api/';
 
   constructor(public httpClient: HttpClient) { }

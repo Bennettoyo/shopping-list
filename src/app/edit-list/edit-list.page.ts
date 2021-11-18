@@ -20,16 +20,7 @@ export class EditListPage implements OnInit {
 
   editListName() {
     if (this.ListName.length > 0) {
-      this.httpService.post("shopping/editListName", { listName: this.ListName, ID: this.ID }).subscribe((rs: any) => {
-        if (rs == 1) {
-          // console.log("Success")
-        } else {
-          console.log("Error")
-        }
-      }, (err: any) => {
-        console.log("Error")
-      });
-      this.popover.dismiss({ data: true });
+      this.popover.dismiss({ data: true, listName: this.ListName, ID: this.ID });
     }
   }
 }

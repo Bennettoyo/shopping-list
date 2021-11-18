@@ -57,9 +57,13 @@ export class HomePage implements OnInit {
     popover.present();
     this.closeList();
     return popover.onDidDismiss().then(
-      (data: any) => {
-        if (data) {
-          this.getListData();
+      (results: any) => {
+        if (results.data) {
+          // Editing Locally
+          var foundIndex = this.listArray.findIndex(x => x.ID == results.data.ID);
+          let listName = results.data.listName;
+          this.listArray[foundIndex].listName = listName;
+          this.editList(results.data)
         }
       });
   }
@@ -67,12 +71,25 @@ export class HomePage implements OnInit {
 
 
   deleteList(ID) {
-    // this.listArray = this.listArray.filter(listArray => listArray.ID !== ID);
+    this.listArray = this.listArray.filter(listArray => listArray.ID !== ID);
+    this.changeDetection.detectChanges();
     this.httpService.get("shopping/deleteList?ID=" + ID).subscribe((rs: any) => {
-      this.listArray = rs;
-      this.getListData();
+      // this.listArray = rs;
+      // this.getListData();
     }, (err) => {
       console.log(err);
+    });
+  }
+
+  editList(data) {
+    this.httpService.post("shopping/editListName", { listName: data.listName, ID: data.ID }).subscribe((rs: any) => {
+      if (rs == 1) {
+        // console.log("Success")
+      } else {
+        console.log("Error")
+      }
+    }, (err: any) => {
+      console.log("Error")
     });
   }
 
@@ -103,17 +120,21 @@ export class HomePage implements OnInit {
   addList() {
     if (this.listInput != "") {
       this.httpService.post("shopping/addList", { listName: this.listInput }).subscribe((rs: any) => {
-        if (rs == 1) {
-          this.getListData();
+        if (rs !== 0) {
+          var newList = { ID: rs, listName: this.listInput };
+          this.listArray.push(newList);
+          this.listInput = "";
+          // this.getListData();
           console.log("Success")
         } else {
           console.log("Error")
+          this.listInput = "";
         }
       }, (err: any) => {
         console.log("Error")
+        this.listInput = "";
       });
     }
-    this.listInput = "";
   }
 
 
