@@ -27,6 +27,7 @@ import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 })
 export class AddListPage implements OnInit {
   @Input() ItemName: string;
+  @Input() Status: string;
   @Input() ItemId: string;
   meat = faDrumstickBite;
   fish = faFish;
@@ -58,6 +59,6 @@ export class AddListPage implements OnInit {
   }
 
   chosenCategory(chosenCategory) {
-    this.modalCtrl.dismiss({ ChosenCategory: chosenCategory, ItemID: this.ItemId, ItemName: this.ItemName });
+    this.modalCtrl.dismiss({ ChosenCategory: chosenCategory, ItemID: this.ItemId, ItemName: this.ItemName, Status: this.Status });
   }
 }

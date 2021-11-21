@@ -19,6 +19,7 @@ export class HomePage implements OnInit {
 
 
   public listArray: any = [];
+  public allShoppingItems: any = [];
   public listInput: any = "";
   public addItemsClicked: any = false;
   public networkStatus: any = false;
@@ -33,6 +34,7 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.getListData();
+    this.getItemsData();
   }
 
 
@@ -47,6 +49,18 @@ export class HomePage implements OnInit {
       console.log(err);
     });
   }
+
+  getItemsData() {
+    this.httpService.get("shopping/getAllShoppingItems").subscribe((rs: any) => {
+      this.allShoppingItems = rs;
+      let shoppingItems = JSON.stringify(this.allShoppingItems);
+      this.storage.setLocalStorage("shoppingItems", shoppingItems);
+      this.changeDetection.detectChanges();
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
 
   async editListName(list) {
     const popover = await this.popoverCtr.create({

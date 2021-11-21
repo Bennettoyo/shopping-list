@@ -41,6 +41,7 @@ export class AddItemPage implements OnInit {
   public shoppingItems: any;
   public itemInput: any;
   public itemId: any;
+  public itemStatus: any;
   public editedCategoryName: any;
   public showAudioResult = false;
   public noItemsLeft = false;
@@ -78,8 +79,21 @@ export class AddItemPage implements OnInit {
 
   ngOnInit() {
     let list = this.storage.getLocalStorage("listDetails");
+    this.shoppingItems = this.storage.getLocalStorage("shoppingItems");
     this.listDetails = JSON.parse(list);
-    this.getItemsData();
+    this.shoppingItems = JSON.parse(this.shoppingItems);
+    this.shoppingItems = this.shoppingItems.filter(items => items.ShoppingListID == this.listDetails.ID);
+    this.shoppingItems = this.shoppingItems.sort((n1, n2) => {
+      if (n1.Category > n2.Category) {
+        return 1;
+      }
+      if (n1.Category < n2.Category) {
+        return -1;
+      }
+      return 0;
+    });
+
+    // this.getItemsData();
   }
 
   checkListening() {
@@ -121,6 +135,7 @@ export class AddItemPage implements OnInit {
 
   editCategoryIcon(item) {
     this.itemId = item.ID;
+    this.itemStatus = item.Status;
     this.editedCategoryName = item.itemName;
     this.openModal();
   }
@@ -135,7 +150,7 @@ export class AddItemPage implements OnInit {
     const modal = await this.modalCtr.create({
       component: AddListPage,
       cssClass: 'my-custom-class',
-      componentProps: { ItemName: ItemName, ItemId: this.itemId }
+      componentProps: { ItemName: ItemName, ItemId: this.itemId, Status: this.itemStatus }
     })
     this.editedCategoryName = "";
     this.itemInput = "";
@@ -150,16 +165,21 @@ export class AddItemPage implements OnInit {
 
   addItem(editedItem) {
     if (editedItem.ItemName != "") {
-      this.httpService.post("shopping/addItem", { itemName: editedItem.ItemName, ShoppingListID: this.listDetails.ID, Category: editedItem.ChosenCategory, ID: editedItem.ItemID }).subscribe((rs: any) => {
-        if (rs == 1) {
-          this.getItemsData();
-          this.itemInput = "";
-          // console.log("Success")
-        } else {
-          // console.log("Error")
-        }
+      this.httpService.post("shopping/addItem", { itemName: editedItem.ItemName, ShoppingListID: this.listDetails.ID, Category: editedItem.ChosenCategory, ID: editedItem.ItemID, Status: editedItem.Status }).subscribe((rs: any) => {
+        var newItem = { ID: rs, itemName: editedItem.ItemName, ShoppingListID: this.listDetails.ID, Category: editedItem.ChosenCategory, Status: 0 };
+        this.shoppingItems.push(newItem);
+        this.shoppingItems = this.shoppingItems.sort((n1, n2) => {
+          if (n1.Category > n2.Category) {
+            return 1;
+          }
+          if (n1.Category < n2.Category) {
+            return -1;
+          }
+          return 0;
+        });
+        this.changeDetection.detectChanges();
+        this.itemInput = "";
       }, (err: any) => {
-        // console.log("Error")
       });
     }
     this.itemId = "";
